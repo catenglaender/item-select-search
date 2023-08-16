@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         divContainers.forEach((container, idx) => {
             if (matching.includes(idx) || container.querySelector('input').checked) {
-                container.style.display = 'block';
+                container.style.maxHeight = '100px';
             } else {
-                container.style.display = 'none';
+                container.style.maxHeight = '0px';
             }
         });
     };

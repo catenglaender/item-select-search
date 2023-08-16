@@ -16,6 +16,8 @@
 
 .select-item {
     order: 2;
+    transition: max-height 1s linear;
+    overflow: hidden;
 }
 
 @keyframes change-order {
