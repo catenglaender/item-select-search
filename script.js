@@ -1,6 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const filterEl = document.querySelector('#filter');
-    const divContainers = Array.from(document.querySelectorAll('.select-item'));
+    const selectableItems = Array.from(document.querySelectorAll('.select-item'));
+    const selectedContainer = document.querySelector('.selected-container');
+    const selectedHeader = document.querySelector('.selected-header');
+    const listHeader = document.querySelector('.list-header');
+
+    // Function to move an item to the selected container during animation
+    const moveToSelectedContainer = container => {
+        selectedContainer.appendChild(container);
+        container.classList.add('selected');
+    };
+
+    // Function to move an item back to the select container during animation
+    const moveToSelectContainer = container => {
+        container.classList.remove('selected');
+        document.querySelector('.select-list').appendChild(container);
+    };
 
     // Function to update the "selected" class for a specific checkbox
     const updateSelectedClass = checkbox => {
@@ -13,35 +28,44 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Apply the "selected" class to pre-selected checkboxes on page load
-    divContainers.forEach(container => {
+    selectableItems.forEach(container => {
         const checkbox = container.querySelector('input');
         updateSelectedClass(checkbox);
+        if (checkbox.checked) {
+            moveToSelectedContainer(container);
+        }
     });
 
-    // Attach event listener to each checkbox to update the "selected" class
-    divContainers.forEach(container => {
+
+    // Attach event listener to each checkbox to update the "selected" class and move items during animations
+    selectableItems.forEach(container => {
         const checkbox = container.querySelector('input');
         checkbox.addEventListener('change', () => {
             updateSelectedClass(checkbox);
-            handler(filterEl.value); // Trigger the filter handler after the class update
+            if (checkbox.checked) {
+                moveToSelectedContainer(container);
+            } else {
+                moveToSelectContainer(container);
+            }
+            handler(filterEl.value);
+            updateHeaderVisibility();
         });
     });
 
-    // Rest of your existing code
-    const labels = divContainers.map(container => container.textContent);
+    const labels = selectableItems.map(container => container.textContent);
 
     const handler = value => {
         const matching = labels.map((label, idx) => {
-            if (divContainers[idx].querySelector('input').checked) {
-                divContainers[idx].classList.add('selected'); // Add the "selected" class
+            if (selectableItems[idx].querySelector('input').checked) {
+                selectableItems[idx].classList.add('selected'); // Add the "selected" class
                 return true; // Always show checked elements
             } else {
-                divContainers[idx].classList.remove('selected'); // Remove the "selected" class
+                selectableItems[idx].classList.remove('selected'); // Remove the "selected" class
                 return label.toLowerCase().includes(value.toLowerCase()) ? idx : null;
             }
         }).filter(el => el !== null);
 
-        divContainers.forEach((container, idx) => {
+        selectableItems.forEach((container, idx) => {
             if (matching.includes(idx) || container.querySelector('input').checked) {
                 container.style.maxHeight = '1080px';
                 container.style.transform = 'scale(1,1)';
@@ -52,10 +76,23 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const updateHeaderVisibility = () => {
+        if (selectedContainer.children.length > 0) {
+            selectedHeader.style.display = 'block';
+            listHeader.style.display = 'block';
+            selectedContainer.style.display = 'block';
+        } else {
+            selectedHeader.style.display = 'none';
+            listHeader.style.display = 'none';
+            selectedContainer.style.display = 'none';
+        }
+    };
 
-    filterEl.addEventListener('keyup', () => handler(filterEl.value));
 
+
+    filterEl.addEventListener('keyup', () => {
+        handler(filterEl.value);
+        updateHeaderVisibility();
+    });
 
 });
-
-

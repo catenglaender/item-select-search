@@ -1,4 +1,27 @@
+// ILIAS variable
+$il-margin-xlarge-vertical: 15px;
+$il-main-border-color: #dddddd !default;
+$il-main-border: 1px solid $il-main-border-color !default;
+
+// reset browser
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+// filterable select component
+
+.select-container,
+.selected-container {
+    border: $il-main-border;
+    padding: $il-margin-xlarge-vertical;
+}
+
 .select-container {
+    margin-top: $il-margin-xlarge-vertical;
+    border: $il-main-border;
+    padding: $il-margin-xlarge-vertical;
     max-height: 100px;
     overflow-y: auto;
 }
@@ -9,8 +32,7 @@
 }
 
 .select-item.selected {
-    order: 1;
-    animation-name: change-order;
+    animation-name: fade-up;
     animation-duration: .2s;
     animation-timing-function: ease;
     animation-delay: 0s;
@@ -20,10 +42,23 @@
 }
 
 .select-item {
-    order: 2;
     height: auto;
     transition: max-height .2s ease, scale .1s ease;
     overflow: hidden;
+}
+
+@keyframes fade-up {
+        
+    0% {
+        transform:translateY(10px);
+        opacity:0;
+        order:2;
+    }
+    100% {
+        transform:translateY(0px);
+        opacity:1;
+        order:1;
+    }
 }
 
 @keyframes change-order {
