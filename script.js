@@ -43,9 +43,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         divContainers.forEach((container, idx) => {
             if (matching.includes(idx) || container.querySelector('input').checked) {
-                container.style.maxHeight = '100px';
+                container.style.maxHeight = '1080px';
+                container.style.transform = 'scale(1,1)';
             } else {
                 container.style.maxHeight = '0px';
+                container.style.transform = 'scale(1,0)';
             }
         });
     };

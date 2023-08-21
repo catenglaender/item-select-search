@@ -1,3 +1,8 @@
+.select-container {
+  max-height: 100px;
+  overflow-y: auto;
+}
+
 .select-list {
   display: flex;
   flex-direction: column;
@@ -16,7 +21,8 @@
 
 .select-item {
   order: 2;
-  transition: max-height 1s linear;
+  height: auto;
+  transition: max-height 0.2s ease, scale 0.1s ease;
   overflow: hidden;
 }
 
