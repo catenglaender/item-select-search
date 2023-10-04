@@ -1,25 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const filterEl = document.querySelector('#filter');
-    const selectableItems = Array.from(document.querySelectorAll('.select-item'));
-    const selectedContainer = document.querySelector('.selected-container');
+    const filterElMulti = document.querySelector('#filter-multi');
+    const selectableItemsMulti = Array.from(document.querySelectorAll('.select-multiple-item'));
+    const selectedContainer = document.querySelector('.select-multiple-selected-container');
+    const selectList = document.querySelector('.select-multiple-list');
     const selectedHeader = document.querySelector('.selected-header');
     const listHeader = document.querySelector('.list-header');
+    const alertNoResults = document.querySelector('.alert-no-results');
 
     // Function to move an item to the selected container during animation
     const moveToSelectedContainer = container => {
         selectedContainer.appendChild(container);
-        container.classList.add('selected');
     };
 
     // Function to move an item back to the select container during animation
     const moveToSelectContainer = container => {
-        container.classList.remove('selected');
-        document.querySelector('.select-list').appendChild(container);
+        document.querySelector('.select-multiple-list').appendChild(container);
     };
 
     // Function to update the "selected" class for a specific checkbox
     const updateSelectedClass = checkbox => {
-        const container = checkbox.closest('.select-item');
+        const container = checkbox.closest('.select-multiple-item');
         if (checkbox.checked) {
             container.classList.add('selected');
         } else {
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // Apply the "selected" class to pre-selected checkboxes on page load
-    selectableItems.forEach(container => {
+    selectableItemsMulti.forEach(container => {
         const checkbox = container.querySelector('input');
         updateSelectedClass(checkbox);
         if (checkbox.checked) {
@@ -38,35 +38,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     // Attach event listener to each checkbox to update the "selected" class and move items during animations
-    selectableItems.forEach(container => {
+    selectableItemsMulti.forEach(container => {
         const checkbox = container.querySelector('input');
         checkbox.addEventListener('change', () => {
-            updateSelectedClass(checkbox);
             if (checkbox.checked) {
-                moveToSelectedContainer(container);
+                // Add the animation class before moving the item
+                container.classList.add('fade-out-up');
+                // Wait for the animation to complete before moving the item
+                container.addEventListener('animationend', () => {
+                    container.classList.remove('fade-out-up');
+                    moveToSelectedContainer(container);
+                    updateHeaderVisibility();
+                    addSelectedClass(container);
+                }, { once: true }); // { once: true } ensures the event listener is removed after execution
             } else {
                 moveToSelectContainer(container);
+                removeSelectedClass(container);
             }
-            handler(filterEl.value);
+            handler(filterElSingle.value);
             updateHeaderVisibility();
         });
     });
+    
+    function addSelectedClass(container) {
+        container.classList.add('selected');
+    }
+    
+    function removeSelectedClass(container) {
+        container.classList.remove('selected');
+    }
 
-    const labels = selectableItems.map(container => container.textContent);
+    const labelsMulti = selectableItemsMulti.map(container => container.textContent);
 
-    const handler = value => {
-        const matching = labels.map((label, idx) => {
-            if (selectableItems[idx].querySelector('input').checked) {
-                selectableItems[idx].classList.add('selected'); // Add the "selected" class
-                return true; // Always show checked elements
-            } else {
-                selectableItems[idx].classList.remove('selected'); // Remove the "selected" class
-                return label.toLowerCase().includes(value.toLowerCase()) ? idx : null;
-            }
+    const handlerMulti = value => {
+        const matching = labelsMulti.map((label, idx) => {
+            return label.toLowerCase().includes(value.toLowerCase()) ? idx : null;
         }).filter(el => el !== null);
-
-        selectableItems.forEach((container, idx) => {
-            if (matching.includes(idx) || container.querySelector('input').checked) {
+    
+        selectableItemsMulti.forEach((container, idx) => {
+            const checkbox = container.querySelector('input');
+            const isChecked = checkbox.checked;
+    
+            if (matching.includes(idx) || isChecked) {
                 container.style.maxHeight = '1080px';
                 container.style.transform = 'scale(1,1)';
             } else {
@@ -81,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
             selectedHeader.style.display = 'block';
             listHeader.style.display = 'block';
             selectedContainer.style.display = 'block';
+            console.log('Header visibility');
         } else {
             selectedHeader.style.display = 'none';
             listHeader.style.display = 'none';
@@ -88,11 +102,67 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    const toggleNoResults = () => {
+        console.log('Toggling No Results');
+        let allAreHidden = true;
+        Array.from(selectList.children).forEach(item => {
+            if (item.style.maxHeight !== '0px') {
+                allAreHidden = false;
+            }
+        });
+    
+        if (allAreHidden) {
+            alertNoResults.style.display = 'block';
+        } else {
+            alertNoResults.style.display = 'none';
+        }
+    };
 
+    // SINGLE SELECT RADIO BUTTONS
+    const filterElSingle = document.querySelector('#filter-single');
+    const selectableItemsSingle = Array.from(document.querySelectorAll('.select-single-item'));
 
-    filterEl.addEventListener('keyup', () => {
-        handler(filterEl.value);
+    const labelsSingle = selectableItemsSingle.map(container => container.textContent);
+
+    const handlerSingle = value => {
+        const matching = labelsSingle.map((label, idx) => {
+            return label.toLowerCase().includes(value.toLowerCase()) ? idx : null;
+        }).filter(el => el !== null);
+    
+        selectableItemsSingle.forEach((container, idx) => {
+            const radioInput = container.querySelector('input');
+            const isChecked = radioInput.checked;
+    
+            if (matching.includes(idx) || isChecked) {
+                container.style.maxHeight = '1080px';
+                container.style.transform = 'scale(1,1)';
+            } else {
+                container.style.maxHeight = '0px';
+                container.style.transform = 'scale(1,0)';
+            }
+        });
+    };
+
+    selectableItemsSingle.forEach(container => {
+        const radio = container.querySelector('input');
+        radio.addEventListener('change', () => {
+            if(radio.checked) {
+                selectableItemsSingle.forEach(container2 => {container2.classList.remove('selected')});
+                container.classList.add('selected');
+            } else {
+                container.classList.remove('selected');
+            }
+        })
+    });
+
+    filterElMulti.addEventListener('keyup', () => {
+        handlerMulti(filterElMulti.value);
         updateHeaderVisibility();
+        toggleNoResults();
+    });
+
+    filterElSingle.addEventListener('keyup', () => {
+        handlerSingle(filterElSingle.value);
     });
 
 });

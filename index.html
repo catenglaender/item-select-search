@@ -2,29 +2,51 @@
 <html>
 
 <head>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <label for="filter">Search templates&nbsp;</label><input id="filter" type="text" class="filter">
+  <div class="limted-width">
+    <h2>Multi-select</h2>
+
     <h3 class="selected-header">Currently selected options</h3>
-    <ul class="selected-container">
+    <ul class="select-multiple-selected-container">
 
     </ul>
+    <label for="filter-multi">Search templates&nbsp;</label><input id="filter-multi" type="text" class="filter">
     <h3 class="list-header">List of all templates</h3>
-    <div class="select-container">
-      <ul id="mdi" class="select-list">
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" checked="" value="616">Registration</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="615">Join Group</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="612">Join Course</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="611">Deadline approaching</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" checked="" value="610">Password reset</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="609">Certificate earned</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="613">Certificate expired</li>
-        <li class="select-item"><input class="talents_idmd-checkbox" type="checkbox" value="614">Appointment reminder</li>
+    <div class="select-multiple-container">
+      <div class="alert-no-results" style="display: none;">Your search had no results. Try another search term.</div>
+      <ul class="select-multiple-list">
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="616">Registration</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="615">Join Group</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="612">Join Course</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="611">Deadline approaching</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" checked="" value="610">Password reset
+        </li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="609">Certificate earned</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="613">Certificate expired</li>
+        <li class="select-multiple-item"><input class="checkbox" type="checkbox" value="614">Appointment reminder</li>
       </ul>
     </div>
+    <br></br>
+    <h2>Single Select</h2>
+    <label for="filter-single">Search templates&nbsp;</label><input id="filter-single" type="text" class="filter">
+    <fieldset class="select-single-container">
+      <ul class="select-single-list">
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="616">Registration</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="615">Join Group</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="612">Join Course</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="611">Deadline approaching</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" checked="" value="610">Password reset
+        </li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="609">Certificate earned</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="613">Certificate expired</li>
+        <li class="select-single-item"><input class="checkbox" type="radio" name="single-group" value="614">Appointment reminder</li>
+      </ul>
+    </fieldset>
+  </div>
 </body>
 
 </html>
