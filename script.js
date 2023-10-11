@@ -1,4 +1,38 @@
+/**
+ * Represents a custom object.
+ * @param {string} listDiv - CSS class name of the div holding the filterable list.
+ * @param {string} searchbarInputID - CSS class name of the search bar.
+ * @param {string} selectMode - Choose if list contains checkboxes or radio buttons. Accepts 'radio' or 'checkbox'.
+ */
+
+class SearchableList {
+    constructor(listDiv, searchbarInputID) {
+        this.listDiv = listDiv;
+        this.searchbarInputID = searchbarInputID;
+    }
+}
+
+class SearchableCheckboxList extends SearchableList {
+    constructor(listDiv, searchbarInputID) {
+        super(listDiv, searchbarInputID);
+    }
+}
+
+class SearchableRadioList extends SearchableList {
+    constructor(listDiv, searchbarInputID) {
+        super(listDiv, searchbarInputID);
+    }
+}
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
+
+});
+
+/*
+
+
     const filterElMulti = document.querySelector('#filter-multi');
     const selectableItemsMulti = Array.from(document.querySelectorAll('.select-multiple-item'));
     const selectedContainer = document.querySelector('.select-multiple-selected-container');
@@ -172,3 +206,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+*/
