@@ -17,6 +17,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelector('.select-multiple-list').appendChild(container);
     };
 
+    const updateHeaderVisibility = () => {
+        if (selectedContainer.children.length > 0) {
+            selectedHeader.style.display = 'block';
+            listHeader.style.display = 'block';
+            selectedContainer.style.display = 'block';
+            console.log('Header visibility on');
+        } else {
+            selectedHeader.style.display = 'none';
+            listHeader.style.display = 'none';
+            selectedContainer.style.display = 'none';
+            console.log('Header visibility off');
+        }
+    };
+
     // Function to update the "selected" class for a specific checkbox
     const updateSelectedClass = checkbox => {
         const container = checkbox.closest('.select-multiple-item');
@@ -55,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 moveToSelectContainer(container);
                 removeSelectedClass(container);
             }
-            handler(filterElSingle.value);
+            handlerMulti(filterElMulti.value);
             updateHeaderVisibility();
         });
     });
@@ -79,8 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const checkbox = container.querySelector('input');
             const isChecked = checkbox.checked;
     
-            if (matching.includes(idx) || isChecked) {
-                container.style.maxHeight = '1080px';
+            if (matching.includes(idx) || isChecked) {updateHeaderVisibility();
                 container.style.transform = 'scale(1,1)';
             } else {
                 container.style.maxHeight = '0px';
@@ -89,18 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    const updateHeaderVisibility = () => {
-        if (selectedContainer.children.length > 0) {
-            selectedHeader.style.display = 'block';
-            listHeader.style.display = 'block';
-            selectedContainer.style.display = 'block';
-            console.log('Header visibility');
-        } else {
-            selectedHeader.style.display = 'none';
-            listHeader.style.display = 'none';
-            selectedContainer.style.display = 'none';
-        }
-    };
+    
 
     const toggleNoResults = () => {
         console.log('Toggling No Results');
@@ -120,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // SINGLE SELECT RADIO BUTTONS
     const filterElSingle = document.querySelector('#filter-single');
+    const selectSingleList = document.querySelector('.select-single-container');
     const selectableItemsSingle = Array.from(document.querySelectorAll('.select-single-item'));
 
     const labelsSingle = selectableItemsSingle.map(container => container.textContent);
@@ -149,11 +152,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if(radio.checked) {
                 selectableItemsSingle.forEach(container2 => {container2.classList.remove('selected')});
                 container.classList.add('selected');
+                selectSingleList.scrollTop = 0;
             } else {
                 container.classList.remove('selected');
             }
         })
     });
+
+    updateHeaderVisibility();
 
     filterElMulti.addEventListener('keyup', () => {
         handlerMulti(filterElMulti.value);
