@@ -4,6 +4,26 @@ ul {
   margin: 0;
 }
 
+body {
+  font-family: "Open Sans", sans-serif;
+}
+
+.limited-width {
+  max-width: 1000px;
+}
+
+.row {
+  display: flex;
+}
+
+.col-flex-grow-1 {
+  flex-grow: 1;
+}
+
+.col-flex-grow-3 {
+  flex-grow: 3;
+}
+
 .select-multiple-container,
 .select-multiple-selected-container {
   border: 1px solid #dddddd;

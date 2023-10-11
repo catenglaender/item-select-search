@@ -10,6 +10,28 @@ ul {
     margin: 0;
 }
 
+// basics 
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.limited-width {
+    max-width: 1000px;
+}
+
+.row {
+    display: flex;
+}
+
+.col-flex-grow-1 {
+    flex-grow: 1;
+}
+
+.col-flex-grow-3 {
+    flex-grow: 3;
+}
+
 // filterable select component
 
 .select-multiple-container,
