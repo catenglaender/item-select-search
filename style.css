@@ -67,7 +67,11 @@ body {
 
 .select-multiple-item {
   height: auto;
+  max-height: 900px;
+  transform: scale(1, 1);
+  transition: max-height 0.2s ease, scale 0.1s ease;
   overflow: hidden;
+  transition: 0.5s;
   transform-origin: top;
 }
 
@@ -142,30 +146,6 @@ fieldset {
     opacity: 1;
     order: 1;
   }
-}
-@keyframes shrink {
-  from {
-    max-height: 100px; /* Set the initial max-height value */
-  }
-  to {
-    max-height: 0px; /* Set the final max-height value for shrinking */
-  }
-}
-@keyframes grow {
-  from {
-    max-height: 0px; /* Set the initial max-height value for growing */
-  }
-  to {
-    max-height: 100px; /* Set the final max-height value */
-  }
-}
-/* Apply the animations to the elements */
-.shrink {
-  animation: shrink 0.3s ease-out forwards;
-}
-
-.grow {
-  animation: grow 0.3s ease-out forwards;
 }
 
 /*# sourceMappingURL=style.css.map */

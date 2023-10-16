@@ -1,3 +1,65 @@
+class SearchableList {
+    /**
+     * List that can be filtered by entering text into a searchbar
+     * @param {string} containerID - the ID of the container with the search input and the list
+     * @param {string} searchbarInputClass - the ".classname" of the search input field
+     * @param {string} listClass - the ".classname" of the list
+     * @param {string} listItemsClass - the ".classname" of single list items
+     * @param {boolean} animateHideShow - list items should (dis)appear with an animation true/false
+     */
+    constructor(containerID, searchbarInputClass, listClass, listItemsClass, animateHideShow = true) {
+        // fetching the actual DOM elements relative to the ID container
+        const searchContainer = document.getElementById(containerID);
+        this.searchbarInput = searchContainer.querySelector(searchbarInputClass);
+        this.list = searchContainer.querySelector(listClass);
+
+        this.listItemsClass = listItemsClass;
+        this.selectableItems = Array.from(this.list.querySelectorAll(listItemsClass));
+
+        // handling the searchbar filter
+        this.filterItemsWithSearchTerm = this.debounce(this.filterItemsWithSearchTerm.bind(this));
+        this.animateHideShow = animateHideShow;
+        this.searchbarInput.addEventListener('input', this.filterItemsWithSearchTerm);
+    }
+
+    debounce(func, delay) {
+        let timeoutId;
+        return function(...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
+
+    filterItemsWithSearchTerm(event) {
+        const value = event.target.value.toLowerCase();
+        this.selectableItems.forEach(container => {
+            const itemText = container.textContent.toLowerCase();
+            const isMatch = itemText.includes(value);
+
+            // showing and hiding list items
+            if (isMatch) {
+                // unhide for screen readers
+                // container.style.display = '';
+                // unhide visually
+                if (this.animateHideShow) {
+                    container.style.maxHeight = '900px';
+                    container.style.transform = 'scale(1,1)';
+                }
+            } else {
+                if (this.animateHideShow) { 
+                    // hide them for screen-readers after animation
+                    // container.style.display = 'none';
+                    container.style.maxHeight = '0px';
+                    container.style.transform = 'scale(1,0)';
+                } else {
+                    container.style.display = 'none';
+                }
+            }
+        });
+    }
+}
 
 /**
  * When a radio or checkbox is checked, a class is applied to the container
@@ -16,66 +78,6 @@ const toggleClassOnContainerOfCheckedInput = (inputEl, containerDiv, selectedCla
         containerDiv.classList.remove(selectedClass);
     }
 };
-
-/**
- * When an input is made in the search bar, only list elements with the entered characters stay visible.
- * @param {string} listClass - CSS .class-name of the div holding the filterable list.
- * @param {string} searchbarInputID - CSS #ID of the search bar.
- * @param {string} listItemClass - CSS .class-name of the individual list items
- */
-class SearchableList {
-    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
-        const searchContainer = document.getElementById(containerID);
-        this.searchbarInput = searchContainer.querySelector(searchbarInputClass);
-        this.list = searchContainer.querySelector(listClass);
-        this.listItemsClass = listItemsClass;
-        this.selectableItems = Array.from(this.list.querySelectorAll(listItemsClass));
-        
-        // Debounce the filterItemsWithSearchTerm function to avoid rapid firing of input events
-        this.filterItemsWithSearchTerm = this.debounce(this.filterItemsWithSearchTerm.bind(this), 300);
-        // Add event listener to the search bar input
-        this.searchbarInput.addEventListener('keyup', this.filterItemsWithSearchTerm);
-    }
-
-    debounce(func, delay) {
-        let timeoutId;
-        return function(...args) {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                func.apply(this, args);
-            }, delay);
-        };
-    }
-
-    filterItemsWithSearchTerm(event) {
-        const itemText = event.target.value;
-        const allItemTexts = this.selectableItems.map(container => container.textContent);
-        const isMatch = allItemTexts.map((label, idx) => {
-            return label.toLowerCase().includes(itemText) ? idx : null;
-        }).filter(el => el !== null);
-
-        this.selectableItems.forEach((container, idx) => {
-            
-            // SHOWING AND HIDING
-            if (isMatch.includes(idx)) {
-                // unhide for screen readers
-                container.style.display = 'block';
-                // unhide visually
-                container.classList.remove('shrink');
-                container.classList.add('grow');
-            } else {
-                // hide them for screen-readers after animation
-                container.addEventListener('animationend', function onAnimationEnd() {
-                    container.style.display = 'none';
-                    container.removeEventListener('animationend', onAnimationEnd);
-                });
-                container.classList.remove('grow');
-                container.classList.add('shrink');
-            }
-        });
-    }
-}
-
 
 class SearchableCheckboxList extends SearchableList {
     constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
