@@ -79,9 +79,28 @@ const toggleClassOnContainerOfCheckedInput = (inputEl, containerDiv, selectedCla
     }
 };
 
-class SearchableCheckboxList extends SearchableList {
-    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
+class SearchableCheckableList extends SearchableList {
+    /**
+     * List that can be filtered by entering text into a searchbar
+     * @param {string} containerID - the ID of the container with the search input and the list
+     * @param {string} searchbarInputClass - the ".classname" of the search input field
+     * @param {string} listClass - the ".classname" of the list
+     * @param {string} listItemsClass - the ".classname" of single list items
+     * @param {boolean} animateHideShow - list items should (dis)appear with an animation true/false
+     * @param {string} checkedItemClass - class name for an item when a checkbox or radio input is selected
+     */
+    constructor(containerID, searchbarInputClass, listClass, listItemsClass, checkedItemClass = 'selected') {
         super(containerID, searchbarInputClass, listClass, listItemsClass);
+        this.selectableItems.forEach(container => {
+            const checkbox = container.querySelector('input');
+            checkbox.addEventListener('change', () => {
+                if (checkbox.checked) {
+                    container.classList.add(checkedItemClass);
+                } else {
+                    container.classList.remove(checkedItemClass);
+                }
+            });
+        });
     }
 }
 
@@ -94,7 +113,7 @@ class SearchableRadioList extends SearchableList {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-    new SearchableList('searchableMultiList', '.filter-multi', '.select-multiple-list', '.select-multiple-item');
+    new SearchableCheckableList('searchableMultiList', '.filter-multi', '.select-multiple-list', '.select-multiple-item');
 });
 
 

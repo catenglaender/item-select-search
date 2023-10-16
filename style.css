@@ -46,8 +46,9 @@ body {
 }
 
 .select-multiple-item.selected {
-  animation-name: fade-up;
-  animation-duration: 0.2s;
+  order: 1;
+  animation-name: change-order;
+  animation-duration: 0.4s;
   animation-timing-function: ease;
   animation-delay: 0s;
   animation-iteration-count: 1;
@@ -55,17 +56,19 @@ body {
   animation-fill-mode: none;
 }
 
+/*
 .fade-out-up {
-  animation-name: fade-out-up;
-  animation-duration: 0.2s;
-  animation-timing-function: ease;
-  animation-delay: 0s;
-  animation-iteration-count: 1;
-  animation-direction: normal;
-  animation-fill-mode: none;
+    animation-name: fade-out-up;
+    animation-duration: .2s;
+    animation-timing-function: ease;
+    animation-delay: 0s;
+    animation-iteration-count: 1;
+    animation-direction: normal;
+    animation-fill-mode: none;
 }
-
+*/
 .select-multiple-item {
+  order: 2;
   height: auto;
   max-height: 900px;
   transform: scale(1, 1);

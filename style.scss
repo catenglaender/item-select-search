@@ -56,8 +56,9 @@ body {
 }
 
 .select-multiple-item.selected {
-    animation-name: fade-up;
-    animation-duration: .2s;
+    order: 1;
+    animation-name: change-order;
+    animation-duration: .4s;
     animation-timing-function: ease;
     animation-delay: 0s;
     animation-iteration-count: 1;
@@ -65,6 +66,7 @@ body {
     animation-fill-mode: none;
 }
 
+/*
 .fade-out-up {
     animation-name: fade-out-up;
     animation-duration: .2s;
@@ -74,8 +76,9 @@ body {
     animation-direction: normal;
     animation-fill-mode: none;
 }
-
+*/
 .select-multiple-item {
+    order: 2;
     height: auto;
     // max-height, transform and transition duration should match the JS
     max-height: 900px;
@@ -141,7 +144,6 @@ fieldset {
 }
 
 @keyframes change-order {
-        
     0% {
         transform:translateY(0px);
         opacity:1;
