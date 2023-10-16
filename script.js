@@ -1,34 +1,102 @@
-/**
- * Represents a custom object.
- * @param {string} listDiv - CSS class name of the div holding the filterable list.
- * @param {string} searchbarInputID - CSS class name of the search bar.
- * @param {string} selectMode - Choose if list contains checkboxes or radio buttons. Accepts 'radio' or 'checkbox'.
- */
 
+/**
+ * When a radio or checkbox is checked, a class is applied to the container
+ * @param {HTMLInputElement} inputEl - the radio or checkbox input element
+ * @param {string} containerDiv - the CSS class of the expected container
+ * @param {string} selectedClass - the name of the CSS class to be toggled on the container
+ */
+const toggleClassOnContainerOfCheckedInput = (inputEl, containerDiv, selectedClass) => {
+    if (!(inputElement instanceof HTMLInputElement)) {
+        throw new TypeError('inputElement must be an instance of HTMLInputElement');
+    }
+    containerDiv = inputEl.closest(containerDiv);
+    if (inputEl.checked) {
+        containerDiv.classList.add(selectedClass);
+    } else {
+        containerDiv.classList.remove(selectedClass);
+    }
+};
+
+/**
+ * When an input is made in the search bar, only list elements with the entered characters stay visible.
+ * @param {string} listClass - CSS .class-name of the div holding the filterable list.
+ * @param {string} searchbarInputID - CSS #ID of the search bar.
+ * @param {string} listItemClass - CSS .class-name of the individual list items
+ */
 class SearchableList {
-    constructor(listDiv, searchbarInputID) {
-        this.listDiv = listDiv;
-        this.searchbarInputID = searchbarInputID;
+    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
+        const searchContainer = document.getElementById(containerID);
+        this.searchbarInput = searchContainer.querySelector(searchbarInputClass);
+        this.list = searchContainer.querySelector(listClass);
+        this.listItemsClass = listItemsClass;
+        this.selectableItems = Array.from(this.list.querySelectorAll(listItemsClass));
+        
+        // Debounce the filterItemsWithSearchTerm function to avoid rapid firing of input events
+        this.filterItemsWithSearchTerm = this.debounce(this.filterItemsWithSearchTerm.bind(this), 300);
+        // Add event listener to the search bar input
+        this.searchbarInput.addEventListener('keyup', this.filterItemsWithSearchTerm);
+    }
+
+    debounce(func, delay) {
+        let timeoutId;
+        return function(...args) {
+            clearTimeout(timeoutId);
+            timeoutId = setTimeout(() => {
+                func.apply(this, args);
+            }, delay);
+        };
+    }
+
+    filterItemsWithSearchTerm(event) {
+        const itemText = event.target.value;
+        const allItemTexts = this.selectableItems.map(container => container.textContent);
+        const isMatch = allItemTexts.map((label, idx) => {
+            return label.toLowerCase().includes(itemText) ? idx : null;
+        }).filter(el => el !== null);
+
+        this.selectableItems.forEach((container, idx) => {
+            
+            // SHOWING AND HIDING
+            if (isMatch.includes(idx)) {
+                // unhide for screen readers
+                container.style.display = 'block';
+                // unhide visually
+                container.classList.remove('shrink');
+                container.classList.add('grow');
+            } else {
+                // hide them for screen-readers after animation
+                container.addEventListener('animationend', function onAnimationEnd() {
+                    container.style.display = 'none';
+                    container.removeEventListener('animationend', onAnimationEnd);
+                });
+                container.classList.remove('grow');
+                container.classList.add('shrink');
+            }
+        });
     }
 }
 
+
 class SearchableCheckboxList extends SearchableList {
-    constructor(listDiv, searchbarInputID) {
-        super(listDiv, searchbarInputID);
+    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
+        super(containerID, searchbarInputClass, listClass, listItemsClass);
     }
 }
 
 class SearchableRadioList extends SearchableList {
-    constructor(listDiv, searchbarInputID) {
-        super(listDiv, searchbarInputID);
+    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
+        super(containerID, searchbarInputClass, listClass, listItemsClass);
     }
 }
 
 
 
 document.addEventListener('DOMContentLoaded', () => {
-
+    new SearchableList('searchableMultiList', '.filter-multi', '.select-multiple-list', '.select-multiple-item');
 });
+
+
+
 
 /*
 
@@ -204,6 +272,4 @@ document.addEventListener('DOMContentLoaded', () => {
     filterElSingle.addEventListener('keyup', () => {
         handlerSingle(filterElSingle.value);
     });
-
-});
 */
