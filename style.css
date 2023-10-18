@@ -1,3 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
 ul {
   list-style: none;
   padding: 0;
@@ -24,30 +28,40 @@ body {
   flex-grow: 3;
 }
 
-.select-multiple-container,
-.select-multiple-selected-container {
-  border: 1px solid #dddddd;
-  padding: 15px;
-  margin-bottom: 15px;
-}
-
-.select-multiple-container,
-.select-single-container {
+.c-searchable-list__body {
   margin-top: 15px;
   border: 1px solid #dddddd;
-  padding: 15px;
-  max-height: 100px;
+  height: 150px;
   overflow-y: auto;
 }
-
-.select-multiple-list {
+.c-searchable-list__list {
   display: flex;
   flex-direction: column;
 }
-
-.select-multiple-item.selected {
+.c-searchable-list__item {
+  order: 2;
+  height: auto;
+  max-height: 900px;
+  transform: scale(1, 1);
+  transition: max-height 0.2s ease, scale 0.1s ease;
+  overflow: hidden;
+  transition: 0.5s;
+  transform-origin: top;
+}
+.c-searchable-list__item label {
+  display: block;
+  width: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+.c-searchable-list__item:hover label {
+  background-color: #dddddd;
+}
+.c-searchable-list__item.selected {
   order: 1;
-  animation-name: change-order;
+  animation-name: change-order-push-up;
   animation-duration: 0.4s;
   animation-timing-function: ease;
   animation-delay: 0s;
@@ -67,17 +81,6 @@ body {
     animation-fill-mode: none;
 }
 */
-.select-multiple-item {
-  order: 2;
-  height: auto;
-  max-height: 900px;
-  transform: scale(1, 1);
-  transition: max-height 0.2s ease, scale 0.1s ease;
-  overflow: hidden;
-  transition: 0.5s;
-  transform-origin: top;
-}
-
 /* SINGLE SELECT */
 fieldset {
   border: none;
@@ -98,7 +101,7 @@ fieldset {
 
 .select-single-item.selected {
   order: 1;
-  animation-name: change-order;
+  animation-name: change-order-push-up;
   animation-duration: 0.4s;
   animation-timing-function: ease;
   animation-delay: 0s;
@@ -128,7 +131,7 @@ fieldset {
     opacity: 0;
   }
 }
-@keyframes change-order {
+@keyframes change-order-push-up {
   0% {
     transform: translateY(0px);
     opacity: 1;

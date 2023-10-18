@@ -1,38 +1,49 @@
+const searchbarInput = ".c-searchable-list__searchbar input";
+const componentBody = ".c-searchable-list__body";
+const list = ".c-searchable-list__list";
+const listItem = ".c-searchable-list__item";
+const listItemCheckbox = 'input';
+const checkedItemClass = 'selected';
+
+const ErrorHintMissingClass = 'Make sure HTML elements have the expected class names.'
+
 class SearchableList {
     /**
      * List that can be filtered by entering text into a searchbar
      * @param {string} containerID - the ID of the container with the search input and the list
-     * @param {string} searchbarInputClass - the ".classname" of the search input field
-     * @param {string} listClass - the ".classname" of the list
-     * @param {string} listItemsClass - the ".classname" of single list items
      * @param {boolean} animateHideShow - list items should (dis)appear with an animation true/false
      */
-    constructor(containerID, searchbarInputClass, listClass, listItemsClass, animateHideShow = true) {
-        // fetching the actual DOM elements relative to the ID container
-        const searchContainer = document.getElementById(containerID);
-        this.searchbarInput = searchContainer.querySelector(searchbarInputClass);
-        this.list = searchContainer.querySelector(listClass);
+    constructor(containerID, animateHideShow = true) {
+        try {
+            this.searchContainer = document.getElementById(containerID);
+            if (this.searchContainer == null) {
+                throw new ReferenceError(`Container element not found or ID not unique. ${ErrorHintMissingClass}`);
+            }
 
-        this.listItemsClass = listItemsClass;
-        this.selectableItems = Array.from(this.list.querySelectorAll(listItemsClass));
+            const htmlElementsToFetch = [
+                { name: "searchbarInput", selector: searchbarInput },
+                { name: "componentBody", selector: componentBody },
+                { name: "list", selector: list }
+            ];
+            
+            htmlElementsToFetch.forEach(element => {
+                this[element.name] = this.searchContainer.querySelector(element.selector);
+                if (this[element.name] === null) {
+                    throw new ReferenceError(`${element.name} element not found. ${ErrorHintMissingClass}`);
+                }
+            });
 
-        // handling the searchbar filter
-        this.filterItemsWithSearchTerm = this.debounce(this.filterItemsWithSearchTerm.bind(this));
+            this.filterItemsSearch = this.filterItemsSearch.bind(this);
+            this.searchbarInput.addEventListener('input', this.filterItemsSearch);
+            this.selectableItems = Array.from(this.list.querySelectorAll(listItem));
+        } catch (e) {
+            console.error(e);
+        }
         this.animateHideShow = animateHideShow;
-        this.searchbarInput.addEventListener('input', this.filterItemsWithSearchTerm);
     }
 
-    debounce(func, delay) {
-        let timeoutId;
-        return function(...args) {
-            clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                func.apply(this, args);
-            }, delay);
-        };
-    }
-
-    filterItemsWithSearchTerm(event) {
+    // methods for main class and all subclasses
+    filterItemsSearch(event) {
         const value = event.target.value.toLowerCase();
         this.selectableItems.forEach(container => {
             const itemText = container.textContent.toLowerCase();
@@ -59,61 +70,57 @@ class SearchableList {
             }
         });
     }
-}
 
-/**
- * When a radio or checkbox is checked, a class is applied to the container
- * @param {HTMLInputElement} inputEl - the radio or checkbox input element
- * @param {string} containerDiv - the CSS class of the expected container
- * @param {string} selectedClass - the name of the CSS class to be toggled on the container
- */
-const toggleClassOnContainerOfCheckedInput = (inputEl, containerDiv, selectedClass) => {
-    if (!(inputElement instanceof HTMLInputElement)) {
-        throw new TypeError('inputElement must be an instance of HTMLInputElement');
-    }
-    containerDiv = inputEl.closest(containerDiv);
-    if (inputEl.checked) {
-        containerDiv.classList.add(selectedClass);
-    } else {
-        containerDiv.classList.remove(selectedClass);
-    }
+    applyCheckedToItems = (container, checkbox, resetAllOthers) => {
+        if (resetAllOthers) {
+            this.selectableItems.forEach(otherContainer => {
+                if (otherContainer !== container) {
+                    otherContainer.classList.remove(checkedItemClass);
+                }
+            });
+        }
+        if (checkbox.checked) {
+            container.classList.add(checkedItemClass);
+        } else {
+            container.classList.remove(checkedItemClass);
+        }
+    };
+
+    // methods for subclasses
+    handleSelection = (checkboxOrRadioInput, resetAllOthers) => {
+        try {
+            this.selectableItems.forEach(container => {
+                const checkbox = container.querySelector(checkboxOrRadioInput);
+                this.applyCheckedToItems(container, checkbox, resetAllOthers);
+                checkbox.addEventListener('change', () => {
+                    this.applyCheckedToItems(container, checkbox, resetAllOthers);
+                    if (resetAllOthers) {
+                        this.componentBody.scroll({ top: 0, behavior: 'smooth' });
+                    }
+                });
+            });
+        } catch (error) {
+            console.error(`Error in handleSelection method. ${ErrorHintMissingClass}`, error);
+        }
+    };
 };
 
 class SearchableCheckableList extends SearchableList {
     /**
-     * List that can be filtered by entering text into a searchbar
+     * List of checkbox or radio items that can be filtered by entering text into a searchbar
      * @param {string} containerID - the ID of the container with the search input and the list
-     * @param {string} searchbarInputClass - the ".classname" of the search input field
-     * @param {string} listClass - the ".classname" of the list
-     * @param {string} listItemsClass - the ".classname" of single list items
      * @param {boolean} animateHideShow - list items should (dis)appear with an animation true/false
-     * @param {string} checkedItemClass - class name for an item when a checkbox or radio input is selected
+     * @param {boolean} resetAllOthers - remove "selected" class on all other items when a new item is selected (e.g. for radio buttons)
      */
-    constructor(containerID, searchbarInputClass, listClass, listItemsClass, checkedItemClass = 'selected') {
-        super(containerID, searchbarInputClass, listClass, listItemsClass);
-        this.selectableItems.forEach(container => {
-            const checkbox = container.querySelector('input');
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    container.classList.add(checkedItemClass);
-                } else {
-                    container.classList.remove(checkedItemClass);
-                }
-            });
-        });
+    constructor(containerID, animateHideShow = true, resetAllOthers = false) {
+        super(containerID, animateHideShow); // Call the super constructor to initialize this.list
+        this.handleSelection(listItemCheckbox, resetAllOthers);
     }
 }
-
-class SearchableRadioList extends SearchableList {
-    constructor(containerID, searchbarInputClass, listClass, listItemsClass) {
-        super(containerID, searchbarInputClass, listClass, listItemsClass);
-    }
-}
-
-
 
 document.addEventListener('DOMContentLoaded', () => {
-    new SearchableCheckableList('searchableMultiList', '.filter-multi', '.select-multiple-list', '.select-multiple-item');
+    new SearchableCheckableList('searchableMultiList', true, false);
+    new SearchableCheckableList('searchableSingleList', true, true);
 });
 
 

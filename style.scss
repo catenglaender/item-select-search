@@ -1,9 +1,22 @@
 // ILIAS variable
 $il-margin-xlarge-vertical: 15px;
+$il-margin-xlarge-horizontal: 15px;
+$il-margin-small-vertical: 2px;
+$il-margin-small-horizontal: 2px;
 $il-main-border-color: #dddddd !default;
 $il-main-border: 1px solid $il-main-border-color !default;
 
+$bg-hover-highlight: #dddddd;
+
+$checked-on-top: true;
+
+$container-height: 150px;
+
 // reset browser
+* {
+    box-sizing: border-box;
+}
+
 ul {
     list-style: none;
     padding: 0;
@@ -34,134 +47,89 @@ body {
 
 // filterable select component
 
-.select-multiple-container,
-.select-multiple-selected-container {
-    border: $il-main-border;
-    padding: $il-margin-xlarge-vertical;
-    margin-bottom: $il-margin-xlarge-vertical;
-}
+.c-searchable-list {
+    &__body {
+        margin-top: $il-margin-xlarge-vertical;
+        border: $il-main-border;
+        // padding: $il-margin-xlarge-vertical;
+        height: $container-height;
+        overflow-y: auto;
+    }
 
-.select-multiple-container,
-.select-single-container {
-    margin-top: $il-margin-xlarge-vertical;
-    border: $il-main-border;
-    padding: $il-margin-xlarge-vertical;
-    max-height: 100px;
-    overflow-y: auto;
-}
+    &__list {
+        display: flex;
+        flex-direction: column;
+    }
 
-.select-multiple-list {
-    display: flex;
-    flex-direction: column;
-}
+    &__item {
+        order: if($checked-on-top, 2, null);
+        height: auto;
+        // max-height, transform and transition duration should match JS
+        max-height: 900px;
+        transform: scale(1, 1);
+        transition: max-height .2s ease, scale .1s ease;
+        overflow: hidden;
+        transition: .5s;
+        transform-origin: top;
 
-.select-multiple-item.selected {
-    order: 1;
-    animation-name: change-order;
-    animation-duration: .4s;
-    animation-timing-function: ease;
-    animation-delay: 0s;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-    animation-fill-mode: none;
-}
+        label {
+            display: block;
+            width: 100%;
+            padding-left: $il-margin-xlarge-horizontal;
+            padding-right: $il-margin-xlarge-horizontal;
+            padding-top: $il-margin-small-vertical;
+            padding-bottom: $il-margin-small-vertical;
+        }
 
-/*
-.fade-out-up {
-    animation-name: fade-out-up;
-    animation-duration: .2s;
-    animation-timing-function: ease;
-    animation-delay: 0s;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-    animation-fill-mode: none;
-}
-*/
-.select-multiple-item {
-    order: 2;
-    height: auto;
-    // max-height, transform and transition duration should match the JS
-    max-height: 900px;
-    transform: scale(1,1);
-    transition: max-height .2s ease, scale .1s ease;
-    overflow: hidden;
-    transition: .5s;
-    transform-origin: top;
-}
+        &:hover label {
+            background-color: $bg-hover-highlight;
+        }
 
-/* SINGLE SELECT */
-
-fieldset {
-    border: none;
-    margin: 0;
-    padding: 0;
-}
-
-.select-single-list {
-    display: flex;
-    flex-direction: column;
-}
-
-.select-single-item {
-    order: 2;
-    transition: .5s;
-    transform-origin: top;
-}
-
-.select-single-item.selected {
-    order: 1;
-    animation-name: change-order;
-    animation-duration: .4s;
-    animation-timing-function: ease;
-    animation-delay: 0s;
-    animation-iteration-count: 1;
-    animation-direction: normal;
-    animation-fill-mode: none;
+        &.selected {
+            order: if($checked-on-top, 1, null);
+            animation-name: change-order-push-up;
+            animation-duration: .4s;
+            animation-timing-function: ease;
+            animation-delay: 0s;
+            animation-iteration-count: 1;
+            animation-direction: normal;
+            animation-fill-mode: none;
+        }
+    }
 }
 
 /* animations */
 
-@keyframes fade-up {
+@keyframes change-order-push-up {
     0% {
-        transform:translateY(10px);
-        opacity:0;
+        @if $checked-on-top {
+            transform: translateY(0px);
+            opacity: 1;
+            order: 2;
+        }
     }
-    100% {
-        transform:translateY(0px);
-        opacity:1;
-    }
-}
 
-@keyframes fade-out-up {
-    0% {
-        transform:translateY(0px);
-        opacity:1;
-    }
-    100% {
-        transform:translateY(-10px);
-        opacity:0;
-    }
-}
-
-@keyframes change-order {
-    0% {
-        transform:translateY(0px);
-        opacity:1;
-        order:2;
-    }
     50% {
-        transform:translateY(-10px);
-        opacity:0;
-        order:2;
+        @if $checked-on-top {
+            transform: translateY(-10px);
+            opacity: 0;
+            order: 2;
+        }
     }
+
     51% {
-        transform:translateY(10px);
-        opacity:0;
-        order:1;
+        @if $checked-on-top {
+            transform: translateY(10px);
+            opacity: 0;
+            order: 1;
+        }
     }
+
     100% {
-        transform:translateY(0px);
-        opacity:1;
-        order:1;
+        @if $checked-on-top {
+            transform: translateY(0px);
+            opacity: 1;
+            order: 1;
+        }
     }
 }
