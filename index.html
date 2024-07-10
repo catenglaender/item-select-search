@@ -4,6 +4,7 @@
 <head>
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -47,18 +48,41 @@
         <div class="c-searchable-list" id="searchableSingleList">
           <div class="c-searchable-list__searchbar">
             <label for="filter-multi">Search templates:</label>
-            <input id="filter-single" type="text">
+            <input id="filter-multi" type="text">
           </div>
           <fieldset class="c-searchable-list__body">
             <ul class="c-searchable-list__list">
-              <li class="c-searchable-list__item"><label for="radio-box_1"><input class="radio-box" id="radio-box_1" type="radio" name="radio-fieldset_1" value="1">Registration</li>
-              <li class="c-searchable-list__item"><label for="radio-box_2"><input class="radio-box" id="radio-box_2" type="radio" name="radio-fieldset_1" value="2">Join Group</li>
-              <li class="c-searchable-list__item"><label for="radio-box_3"><input class="radio-box" id="radio-box_3" type="radio" name="radio-fieldset_1" value="3" checked>Join Course</li>
-              <li class="c-searchable-list__item"><label for="radio-box_4"><input class="radio-box" id="radio-box_4" type="radio" name="radio-fieldset_1" value="4">Deadline approaching</li>
-              <li class="c-searchable-list__item"><label for="radio-box_5"><input class="radio-box" id="radio-box_5" type="radio" name="radio-fieldset_1" value="5">Password reset</li>
-              <li class="c-searchable-list__item"><label for="radio-box_6"><input class="radio-box" id="radio-box_6" type="radio" name="radio-fieldset_1" value="6">Certificate earned</li>
-              <li class="c-searchable-list__item"><label for="radio-box_7"><input class="radio-box" id="radio-box_7" type="radio" name="radio-fieldset_1" value="7">Certificate expired</li>
-              <li class="c-searchable-list__item"><label for="radio-box_8"><input class="radio-box" id="radio-box_8" type="radio" name="radio-fieldset_1" value="8">Appointment reminder</li>
+              <li class="c-searchable-list__item"><label for="radio-box_1"><input class="radio-box" id="radio-box_1" type="radio" name="radio-fieldset_1" value="1">Registration</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_2"><input class="radio-box" id="radio-box_2" type="radio" name="radio-fieldset_1" value="2">Join Group</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_3"><input class="radio-box" id="radio-box_3" type="radio" name="radio-fieldset_1" value="3" checked>Join Course</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_4"><input class="radio-box" id="radio-box_4" type="radio" name="radio-fieldset_1" value="4">Deadline approaching</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_5"><input class="radio-box" id="radio-box_5" type="radio" name="radio-fieldset_1" value="5">Password reset</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_6"><input class="radio-box" id="radio-box_6" type="radio" name="radio-fieldset_1" value="6">Certificate earned</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_7"><input class="radio-box" id="radio-box_7" type="radio" name="radio-fieldset_1" value="7">Certificate expired</label></li>
+              <li class="c-searchable-list__item"><label for="radio-box_8"><input class="radio-box" id="radio-box_8" type="radio" name="radio-fieldset_1" value="8">Appointment reminder</label></li>
+            </ul>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+
+    <h2>Visual Select</h2>
+
+    <div class="row">
+      <div class="col col-flex-grow-1">Block Templates</div>
+      <div class="col col-flex-grow-3">
+        <div class="c-visual-select" id="visualSelect">
+          <div class="c-visual-select__searchbar">
+            <label for="filter-visual">Search templates:</label>
+            <input id="filter-visual" type="text">
+          </div>
+          <fieldset class="c-visual-select__body">
+            <ul class="c-visual-select__list">
+              <li class="c-visual-select__item"><label for="radio-box_9"><input class="radio-box" id="radio-box_9" type="radio" name="radio-fieldset_2" value="1"/><span class="label-text">none</span><div>Apply no special styling to the current block.</div></label></li>
+              <li class="c-visual-select__item"><label for="radio-box_10"><input class="radio-box" id="radio-box_10" type="radio" name="radio-fieldset_2" value="1"/><span class="label-text">Attention</span><div class="block-attention"><i class="fa-solid fa-triangle-exclamation"></i> This block should only be used for important warnings people really need to see. Better use it sparingly.</div></label></li>
+              <li class="c-visual-select__item"><label for="radio-box_11"><input class="radio-box" id="radio-box_11" type="radio" name="radio-fieldset_2" value="2"/><span class="label-text">Info</span><div class="block-info"><i class="fa-solid fa-triangle-exclamation"></i> An information that should stand out from the rest of the text.</div></label></label></li>
+              <li class="c-visual-select__item"><label for="radio-box_12"><input class="radio-box" id="radio-box_12" type="radio" name="radio-fieldset_2" value="3" checked/><span class="label-text">Quote</span><div class="block-quote"><i class="fa-solid fa-triangle-exclamation"></i> A quote once said by a smart person. May we recommend a cursive font to indicate the author. <em>Leonardo DaVinci</em></div></label></label></li>
+              <li class="c-visual-select__item"><label for="radio-box_13"><input class="radio-box" id="radio-box_13" type="radio" name="radio-fieldset_2" value="4"/><span class="label-text">Button</span><div class="block-btn">Call to Action</div></label></li>
             </ul>
           </fieldset>
         </div>

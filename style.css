@@ -21,24 +21,27 @@ body {
 }
 
 .col-flex-grow-1 {
-  flex-grow: 1;
+  width: 25%;
 }
 
 .col-flex-grow-3 {
-  flex-grow: 3;
+  width: 75%;
 }
 
-.c-searchable-list__body {
+.c-searchable-list__body,
+.c-visual-select__body {
   margin-top: 15px;
   border: 1px solid #dddddd;
   height: 150px;
   overflow-y: auto;
 }
-.c-searchable-list__list {
+.c-searchable-list__list,
+.c-visual-select__list {
   display: flex;
   flex-direction: column;
 }
-.c-searchable-list__item {
+.c-searchable-list__item,
+.c-visual-select__item {
   order: 2;
   height: auto;
   max-height: 900px;
@@ -48,7 +51,8 @@ body {
   transition-behavior: allow-discrete;
   transform-origin: top;
 }
-.c-searchable-list__item label {
+.c-searchable-list__item label,
+.c-visual-select__item label {
   display: block;
   width: 100%;
   padding-left: 15px;
@@ -56,10 +60,12 @@ body {
   padding-top: 2px;
   padding-bottom: 2px;
 }
-.c-searchable-list__item:hover label {
+.c-searchable-list__item:hover label,
+.c-visual-select__item:hover label {
   background-color: #dddddd;
 }
-.c-searchable-list__item.selected {
+.c-searchable-list__item.selected,
+.c-visual-select__item.selected {
   order: 1;
   animation-name: change-order-push-up;
   animation-duration: 0.4s;
@@ -68,6 +74,27 @@ body {
   animation-iteration-count: 1;
   animation-direction: normal;
   animation-fill-mode: none;
+}
+
+.c-visual-select__list {
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+.c-visual-select__item.selected {
+  grid-column: 1/3;
+}
+.c-visual-select__body {
+  height: 450px;
+}
+.c-visual-select label {
+  height: 100%;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+.c-visual-select label > span + * {
+  margin-top: 2px;
 }
 
 /* animations */
@@ -92,6 +119,32 @@ body {
     opacity: 1;
     order: 1;
   }
+}
+/* fake ILIAS page editor blocks */
+.block-attention {
+  padding: 15px 15px;
+  border: 1px solid #571616;
+  background-color: #eab8b8;
+}
+
+.block-info {
+  padding: 15px 15px;
+  border: 1px solid #163e57;
+  background-color: #b8d7ea;
+}
+
+.block-quote {
+  padding: 15px 15px;
+  border: 1px solid #3c3c3c;
+  background-color: #dcdcdc;
+}
+
+.block-btn {
+  width: max-content;
+  border-radius: 10px;
+  padding: 15px 15px;
+  border: 1px solid #3c3c3c;
+  background-color: #dcdcdc;
 }
 
 /*# sourceMappingURL=style.css.map */
