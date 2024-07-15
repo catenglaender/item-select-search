@@ -97,12 +97,8 @@ class SearchableCheckableList extends SearchableList {
     handleSelection = (checkboxOrRadioInput, resetAllOthers) => {
         this.selectableItems.forEach(container => {
             const checkbox = container.querySelector(checkboxOrRadioInput);
-            this.applyCheckedToItems(container, checkbox, resetAllOthers);
             checkbox.addEventListener('change', () => {
                 this.applyCheckedToItems(container, checkbox, resetAllOthers);
-                if (resetAllOthers) {
-                    this.componentBody.scroll({ top: 0, behavior: 'smooth' });
-                }
             });
         });
     };
@@ -114,6 +110,7 @@ class SearchableCheckableList extends SearchableList {
                     otherContainer.classList.remove(this.checkedItemClass);
                 }
             });
+            this.componentBody.scroll({ top: 0, behavior: 'smooth' });
         }
         if (checkbox.checked) {
             container.classList.add(this.checkedItemClass);
@@ -141,7 +138,7 @@ class VisualSelect extends SearchableCheckableList {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new SearchableCheckableList('searchableMultiList', false);
-    new SearchableCheckableList('searchableSingleList', true);
-    new VisualSelect('visualSelect', true);
+    let searchableMultiList = new SearchableCheckableList('searchableMultiList', false);
+    let searchableSingleList = new SearchableCheckableList('searchableSingleList', true);
+    let visualSelect = new VisualSelect('visualSelect', true);
 });
