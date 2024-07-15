@@ -91,6 +91,7 @@ class SearchableCheckableList extends SearchableList {
         if (this.constructor === SearchableCheckableList) {
             this.init();
             this.handleSelection(this.listItemCheckbox, resetAllOthers);
+            this.initializeCheckedItems();
         }
     }
 
@@ -118,6 +119,15 @@ class SearchableCheckableList extends SearchableList {
             container.classList.remove(this.checkedItemClass);
         }
     };
+
+    initializeCheckedItems() {
+        this.selectableItems.forEach(container => {
+            const checkbox = container.querySelector(this.listItemCheckbox);
+            if (checkbox.checked) {
+                this.applyCheckedToItems(container, checkbox, false);
+            }
+        });
+    }
 }
 
 class VisualSelect extends SearchableCheckableList {
@@ -130,6 +140,7 @@ class VisualSelect extends SearchableCheckableList {
 
         this.init(); // Call init after setting subclass-specific properties
         this.handleSelection(this.listItemCheckbox, resetAllOthers);
+        this.initializeCheckedItems();
     }
 
     fetchElements() {
@@ -137,8 +148,52 @@ class VisualSelect extends SearchableCheckableList {
     }
 }
 
+class ClassToggler {
+    constructor(containerId, targetClass, toggleClass) {
+        this.container = document.getElementById(containerId);
+        this.targetClass = targetClass;
+        this.toggleClass = toggleClass;
+
+        if (!this.container) {
+            throw new Error(`No element found with ID "${containerId}"`);
+        }
+    }
+
+    // Method to add the toggle class
+    addClass() {
+        this._getTargetElements().forEach(element => {
+            element.classList.add(this.toggleClass);
+        });
+    }
+
+    // Method to remove the toggle class
+    removeClass() {
+        this._getTargetElements().forEach(element => {
+            element.classList.remove(this.toggleClass);
+        });
+    }
+
+    // Method to toggle the toggle class
+    toggleClassMethod() {
+        this._getTargetElements().forEach(element => {
+            element.classList.toggle(this.toggleClass);
+        });
+    }
+
+    // Helper method to get target elements
+    _getTargetElements() {
+        return this.container.querySelectorAll(`.${this.targetClass}`);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let searchableMultiList = new SearchableCheckableList('searchableMultiList', false);
     let searchableSingleList = new SearchableCheckableList('searchableSingleList', true);
     let visualSelect = new VisualSelect('visualSelect', true);
+    const visualSelectShowAllToggler = new ClassToggler('visualSelect', 'c-visual-select__body', 'expanded');
+    var toggleExpandStyleList = document.getElementById("toggleExpandStyleList");
+    toggleExpandStyleList.onclick = () => {
+        visualSelectShowAllToggler.toggleClassMethod();
+        return false;
+    }
 });
